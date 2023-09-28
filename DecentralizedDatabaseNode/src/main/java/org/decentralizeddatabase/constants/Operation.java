@@ -1,0 +1,15 @@
+package org.decentralizeddatabase.constants;
+
+public enum Operation {
+    CREATE_DATABASE,
+    SET_DATABASE,
+    DELETE_DATABASE,
+    CREATE_COLLECTION,
+    SET_COLLECTION,
+    DELETE_COLLECTION,
+    INSERT_DOCUMENT,
+    UPDATE_DOCUMENT,
+    DELETE_DOCUMENT,
+    GET_DOCUMENT_BY_ID,
+    GET_DOCUMENTS_BY_FIELD,
+}
