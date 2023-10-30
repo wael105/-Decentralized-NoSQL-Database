@@ -11,12 +11,12 @@ class Server implements Runnable {
 
     private final UserRegistrationService userRegistrationService;
 
-    private final NodeManager nodeManager;
+    private final NodeRepository nodeRepository;
 
-    public Server(Socket serverSocket, UserRegistrationService userRegistrationService, NodeManager nodeManager) {
+    public Server(Socket serverSocket, UserRegistrationService userRegistrationService, NodeRepository nodeRepository) {
         this.clientSocket = serverSocket;
         this.userRegistrationService = userRegistrationService;
-        this.nodeManager = nodeManager;
+        this.nodeRepository = nodeRepository;
     }
 
     @Override
@@ -26,7 +26,7 @@ class Server implements Runnable {
 
             String password = clientRead.readLine();
             User user = userRegistrationService.register(password);
-            Node node = nodeManager.getNode(user.getHostName());
+            Node node = nodeRepository.getNode(user.getHostName());
             clientWrite.println(user.getUserId());
             clientWrite.println("127.0.0.1");
             clientWrite.println(node.getClientPort());
@@ -41,12 +41,12 @@ class Server implements Runnable {
 public class Main {
     public static void main(String[] args) {
         Docker docker = new Docker(Shell.INSTANCE, NodeProperties.INSTANCE);
-        NodeManager nodeManager = new NodeManager();
+        NodeRepository nodeRepository = new NodeRepository();
         try {
 
             List<Node> nodes = docker.setupDockerNetworkAndContainers("NoSqlNetwork", "database-node");
             for (Node node : nodes) {
-                nodeManager.addNode(node);
+                nodeRepository.addNode(node);
             }
         } catch (Exception e) {
             System.out.println("Error while creating docker network and containers");
@@ -55,8 +55,8 @@ public class Main {
 
         UserRegistrationService userRegistrationService = new UserRegistrationService(
                 DiskService.INSTANCE,
-                new DatabaseCommunicator(nodeManager.getNodes()),
-                new LoadBalancer(nodeManager.getNodesNames())
+                new DatabaseCommunicator(nodeRepository.getNodes()),
+                new LoadBalancer(nodeRepository.getNodesNames())
         );
 
         // bootstrap client port
@@ -64,7 +64,7 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(port)){
             System.out.println("Bootstrap server started at port : " + port);
             while (true)
-                new Thread(new Server(serverSocket.accept(), userRegistrationService, nodeManager)).start();
+                new Thread(new Server(serverSocket.accept(), userRegistrationService, nodeRepository)).start();
         } catch (IOException e) {
             e.printStackTrace();
         }

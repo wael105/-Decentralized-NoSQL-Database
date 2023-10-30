@@ -59,6 +59,7 @@ public class Collection {
     public void addDocument(int id, Map<String, Object> document) {
         idsIndex.getIdLocks().put(id, new StampedLock());
         for (Map.Entry<String, Object> entry : document.entrySet()) {
+            // check if the property should be indexed
             if (entry.getKey().equals("id") || !schema.getRequiredProperties().containsKey(entry.getKey()) || entry.getValue() instanceof Map || entry.getValue() instanceof List) {
                 continue;
             }
@@ -66,25 +67,12 @@ public class Collection {
         }
     }
 
-    private void addToIndex(String key, String stringValue, Integer id) {
-        indexes.getCollectionIndexes().computeIfAbsent(key, k -> new ConcurrentHashMap<>())
-                            .computeIfAbsent(stringValue, k -> ConcurrentHashMap.newKeySet())
-                            .add(id);
-    }
-
     public void updateDocument(int id, Map<String, Object> newDocument, Map<String, Object> oldDocument) {
         for (Map.Entry<String, Object> entry : newDocument.entrySet()) {
             if (entry.getKey().equals("id") || !schema.getRequiredProperties().containsKey(entry.getKey())) {
                 continue;
             }
-
-            String oldValue = oldDocument.get(entry.getKey()).toString();
-
-            indexes.getCollectionIndexes().get(entry.getKey()).get(oldValue).remove(id);
-            if (indexes.getCollectionIndexes().get(entry.getKey()).get(oldValue).isEmpty()) {
-                indexes.getCollectionIndexes().get(entry.getKey()).remove(oldValue);
-            }
-
+            deleteIndex(entry.getKey(), oldDocument.get(entry.getKey()).toString(), id);
             addToIndex(entry.getKey(), entry.getValue().toString(), id);
         }
     }
@@ -95,13 +83,7 @@ public class Collection {
             if (entry.getKey().equals("id") || !schema.getRequiredProperties().containsKey(entry.getKey())) {
                 continue;
             }
-
-            String value = document.get(entry.getKey()).toString();
-
-            indexes.getCollectionIndexes().get(entry.getKey()).get(value).remove(id);
-            if (indexes.getCollectionIndexes().get(entry.getKey()).get(value).isEmpty()) {
-                indexes.getCollectionIndexes().get(entry.getKey()).remove(value);
-            }
+            deleteIndex(entry.getKey(), document.get(entry.getKey()).toString(), id);
         }
     }
 
@@ -150,5 +132,19 @@ public class Collection {
 
     public StampedLock getDocumentLock(int id) {
         return idsIndex.getIdLocks().get(id);
+    }
+
+    private void addToIndex(String key, String stringValue, int id) {
+        indexes.getCollectionIndexes().computeIfAbsent(key, k -> new ConcurrentHashMap<>())
+                .computeIfAbsent(stringValue, k -> ConcurrentHashMap.newKeySet())
+                .add(id);
+    }
+
+
+    private void deleteIndex(String key, String stringValue, int id) {
+        indexes.getCollectionIndexes().get(key).get(stringValue).remove(id);
+        if (indexes.getCollectionIndexes().get(key).get(stringValue).isEmpty()) {
+            indexes.getCollectionIndexes().get(key).remove(stringValue);
+        }
     }
 }

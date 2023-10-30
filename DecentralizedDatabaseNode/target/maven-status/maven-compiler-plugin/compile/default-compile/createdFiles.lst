@@ -3,7 +3,7 @@ org\decentralizeddatabase\services\DatabaseService.class
 org\decentralizeddatabase\ClientServer.class
 org\decentralizeddatabase\constants\DataType.class
 org\decentralizeddatabase\services\CollectionService.class
-org\decentralizeddatabase\RequestDeserializer.class
+org\decentralizeddatabase\models\idlocksincollection\IdLocksInCollection.class
 org\decentralizeddatabase\commands\CommandFactory.class
 org\decentralizeddatabase\DecentralizedDatabase.class
 org\decentralizeddatabase\services\DiskService.class
@@ -11,7 +11,6 @@ org\decentralizeddatabase\constants\FailedResponse.class
 org\decentralizeddatabase\commands\commands\SetCollection.class
 org\decentralizeddatabase\commands\commands\SetDatabase.class
 org\decentralizeddatabase\nodes\NodeCommunicator.class
-org\decentralizeddatabase\models\IdLocksInCollection.class
 org\decentralizeddatabase\Node.class
 org\decentralizeddatabase\commands\commands\DeleteCollection.class
 org\decentralizeddatabase\DatabaseLookUp.class
@@ -28,6 +27,7 @@ org\decentralizeddatabase\constants\SuccessfulResponse.class
 org\decentralizeddatabase\models\User.class
 org\decentralizeddatabase\models\requests\UserRequest.class
 org\decentralizeddatabase\models\DatabaseObject.class
+org\decentralizeddatabase\models\requests\RequestDeserializer.class
 org\decentralizeddatabase\models\requests\Request.class
 org\decentralizeddatabase\DatabaseUserState.class
 org\decentralizeddatabase\models\Affinity.class
@@ -36,14 +36,14 @@ org\decentralizeddatabase\commands\commands\DeleteDatabase.class
 org\decentralizeddatabase\models\schema\Schema.class
 org\decentralizeddatabase\commands\Command.class
 org\decentralizeddatabase\Bootstrap.class
-org\decentralizeddatabase\IdsInCollectionJacksonSerializer.class
 org\decentralizeddatabase\services\DatabaseFacade.class
 org\decentralizeddatabase\services\ValidationService.class
 org\decentralizeddatabase\commands\commands\GetDocumentById.class
 org\decentralizeddatabase\models\requests\UserRequest$UserRequestBuilder.class
 org\decentralizeddatabase\authentication\AuthenticationService.class
 org\decentralizeddatabase\services\ValidationService$1.class
-org\decentralizeddatabase\IdsInCollectionJacksonDeserializer.class
+org\decentralizeddatabase\models\idlocksincollection\IdLocksInCollectionJacksonDeserializer.class
+org\decentralizeddatabase\models\idlocksincollection\IdLocksInCollectionJacksonSerializer.class
 org\decentralizeddatabase\constants\Operation.class
 org\decentralizeddatabase\services\DocumentService.class
 org\decentralizeddatabase\commands\commands\UpdateDocument.class

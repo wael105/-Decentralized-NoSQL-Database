@@ -37,7 +37,7 @@ public class InsertDocument extends Command {
 
             Map<String, Object> data = request.getData();
 
-            if(!validationService.validateDocument(collection, data))
+            if(!validationService.isDocumentValid(collection, data))
                 return FailedResponse.VALUE_DOES_NOT_MATCH_SCHEMA.getValue();
 
             Response result;

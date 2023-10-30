@@ -18,7 +18,7 @@ public class DatabaseCommunicator {
         this.nodes = nodes;
     }
 
-    public void register(User user)  {
+    public void registerUserToDatabaseNodes(User user)  {
 
         String userJson = null;
 

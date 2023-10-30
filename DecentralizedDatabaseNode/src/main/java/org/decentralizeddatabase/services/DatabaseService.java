@@ -35,7 +35,6 @@ public enum DatabaseService {
                 return FailedResponse.DATABASE_ALREADY_EXISTS;
 
             diskService.createDirectory(nodeProperties.getDatabaseLocation() + "\\" + databaseName);
-            // TODO containskey concurrency problem (no exclusive access and visibility guarantee)
             databaseLookUp.addDatabaseObject(new DatabaseObject(databaseName));
 
             return SuccessfulResponse.DATABASE_CREATED;

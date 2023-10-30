@@ -36,7 +36,7 @@ public class UpdateDocument extends Command {
 
         Map<String, Object> data = request.getData();
 
-        if(!validationService.validateDocument(collection, data))
+        if(!validationService.isDocumentValid(collection, data))
             return FailedResponse.VALUE_DOES_NOT_MATCH_SCHEMA.getValue();
 
         int id = (int) data.get("id");

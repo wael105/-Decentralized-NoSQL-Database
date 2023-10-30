@@ -10,12 +10,11 @@ import org.decentralizeddatabase.models.Document;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.StampedLock;
 
 public enum DocumentService {
 
-    INSTANCE(DiskService.INSTANCE, new LRUCache<>(10));
+    INSTANCE(DiskService.INSTANCE, new LRUCache<>(100));
 
     private final DiskService diskService;
 
@@ -201,7 +200,6 @@ public enum DocumentService {
     }
 
     private Document getExistingDocument(Collection collection, int id) {
-
         Document document = new Document();
         document.setValue(diskService.read(collection.getFilePath(id), Map.class));
 
